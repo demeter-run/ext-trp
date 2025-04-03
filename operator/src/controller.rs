@@ -36,7 +36,6 @@ impl Context {
         {"name": "Network", "jsonPath": ".spec.network", "type": "string"},
         {"name": "Throughput Tier", "jsonPath":".spec.throughputTier", "type": "string"}, 
         {"name": "Endpoint URL", "jsonPath": ".status.endpointUrl", "type": "string"},
-        {"name": "Authenticated Endpoint URL", "jsonPath": ".status.authenticatedEndpointUrl", "type": "string"},
         {"name": "Auth Token", "jsonPath": ".status.authToken", "type": "string"}
     "#)]
 #[serde(rename_all = "camelCase")]
@@ -50,16 +49,12 @@ pub struct TrpPortSpec {
 #[serde(rename_all = "camelCase")]
 pub struct TrpPortStatus {
     pub endpoint_url: String,
-    pub authenticated_endpoint_url: Option<String>,
     pub auth_token: String,
 }
 
 async fn reconcile(crd: Arc<TrpPort>, ctx: Arc<Context>) -> Result<Action> {
-    let (hostname, hostname_key) = build_hostname(&crd.spec.auth_token);
-
     let status = TrpPortStatus {
-        endpoint_url: format!("https://{hostname}",),
-        authenticated_endpoint_url: format!("https://{hostname_key}").into(),
+        endpoint_url: format!("https://{}", build_hostname(&crd.spec.network)),
         auth_token: crd.spec.auth_token.clone(),
     };
 

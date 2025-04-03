@@ -24,13 +24,9 @@ pub async fn patch_resource_status(
     Ok(())
 }
 
-pub fn build_hostname(key: &str) -> (String, String) {
+pub fn build_hostname(network: &str) -> String {
     let config = get_config();
-
     let extension_subdomain = &config.extension_subdomain;
     let dns_zone = &config.dns_zone;
-    let hostname = format!("{extension_subdomain}.{dns_zone}");
-    let hostname_key = format!("{key}.{extension_subdomain}.{dns_zone}");
-
-    (hostname, hostname_key)
+    format!("{network}.{extension_subdomain}.{dns_zone}")
 }

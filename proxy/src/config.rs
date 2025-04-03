@@ -12,10 +12,12 @@ pub struct Config {
     pub trp_port: u16,
     pub trp_dns: String,
     pub health_endpoint: String,
+    pub network: String,
 }
 impl Config {
     pub fn new() -> Self {
         Self {
+            network: env::var("NETWORK").expect("PROXY_ADDR must be set"),
             proxy_addr: env::var("PROXY_ADDR").expect("PROXY_ADDR must be set"),
             proxy_namespace: env::var("PROXY_NAMESPACE").expect("PROXY_NAMESPACE must be set"),
             proxy_tiers_path: env::var("PROXY_TIERS_PATH")
@@ -39,6 +41,10 @@ impl Config {
             trp_dns: env::var("TRP_DNS").expect("TRP_DNS must be set"),
             health_endpoint: "/dmtr_health".to_string(),
         }
+    }
+
+    pub fn instance(&self) -> String {
+        format!("trp-{}.{}:{}", self.network, self.trp_dns, self.trp_port)
     }
 }
 impl Default for Config {

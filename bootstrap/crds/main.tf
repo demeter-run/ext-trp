@@ -38,11 +38,6 @@ resource "kubernetes_manifest" "customresourcedefinition_trpports_demeter_run" {
               "type"     = "string"
             },
             {
-              "jsonPath" = ".status.authenticatedEndpointUrl"
-              "name"     = "Authenticated Endpoint URL"
-              "type"     = "string"
-            },
-            {
               "jsonPath" = ".status.authToken"
               "name"     = "Auth Token"
               "type"     = "string"
@@ -77,10 +72,6 @@ resource "kubernetes_manifest" "customresourcedefinition_trpports_demeter_run" {
                   "properties" = {
                     "authToken" = {
                       "type" = "string"
-                    }
-                    "authenticatedEndpointUrl" = {
-                      "nullable" = true
-                      "type"     = "string"
                     }
                     "endpointUrl" = {
                       "type" = "string"

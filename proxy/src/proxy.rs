@@ -6,7 +6,6 @@ use pingora::{
     upstreams::peer::HttpPeer,
 };
 use pingora_limits::rate::Rate;
-use regex::Regex;
 use std::sync::Arc;
 use tracing::info;
 
@@ -18,17 +17,10 @@ static DMTR_API_KEY: &str = "dmtr-api-key";
 pub struct TrpProxy {
     state: Arc<State>,
     config: Arc<Config>,
-    host_regex: Regex,
 }
 impl TrpProxy {
     pub fn new(state: Arc<State>, config: Arc<Config>) -> Self {
-        let host_regex = Regex::new(r"(dmtr_[\w\d-]+)?\.?.+").unwrap();
-
-        Self {
-            state,
-            config,
-            host_regex,
-        }
+        Self { state, config }
     }
 
     async fn has_limiter(&self, consumer: &Consumer) -> bool {
@@ -75,21 +67,10 @@ impl TrpProxy {
         Ok(false)
     }
 
-    fn extract_key(&self, session: &Session) -> String {
-        let host = session
-            .get_header("host")
-            .map(|v| v.to_str().unwrap())
-            .unwrap();
-
-        let captures = self.host_regex.captures(host).unwrap();
-        let mut key = session
+    fn extract_key(&self, session: &Session) -> Option<String> {
+        session
             .get_header(DMTR_API_KEY)
-            .map(|v| v.to_str().unwrap())
-            .unwrap_or_default();
-        if let Some(m) = captures.get(1) {
-            key = m.as_str();
-        }
-        key.to_string()
+            .map(|v| v.to_str().unwrap().to_string())
     }
 
     async fn respond_health(&self, session: &mut Session, ctx: &mut Context) {
@@ -128,19 +109,23 @@ impl ProxyHttp for TrpProxy {
             return Ok(true);
         }
 
-        let key = self.extract_key(session);
-        let consumer = self.state.get_consumer(&key).await;
+        let Some(key) = self.extract_key(session) else {
+            session.respond_error(401).await?;
+            return Ok(true);
+        };
 
-        if consumer.is_none() {
+        let Some(consumer) = self.state.get_consumer(&key).await else {
+            session.respond_error(401).await?;
+            return Ok(true);
+        };
+
+        if consumer.network != self.config.network {
             session.respond_error(401).await?;
             return Ok(true);
         }
 
-        ctx.consumer = consumer.unwrap();
-        ctx.instance = format!(
-            "trp-{}.{}:{}",
-            ctx.consumer.network, self.config.trp_dns, self.config.trp_port
-        );
+        ctx.consumer = consumer;
+        ctx.instance = self.config.instance();
 
         if self.limiter(&ctx.consumer).await? {
             session.respond_error(429).await?;
