@@ -19,7 +19,7 @@ pull_batch_size = 100
 [submit]
 prune_height = 200
 
-[serve.grpc]
+[serve.trp]
 listen_address = "[::]:8000"
 
 [mithril]
