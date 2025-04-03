@@ -6,6 +6,9 @@ use operator::{controller, metrics as metrics_collector, State};
 
 #[tokio::main]
 async fn main() -> io::Result<()> {
+    rustls::crypto::aws_lc_rs::default_provider()
+        .install_default()
+        .expect("Failed to install default provider");
     dotenv().ok();
 
     tracing_subscriber::fmt().with_max_level(Level::INFO).init();

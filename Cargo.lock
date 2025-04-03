@@ -2092,6 +2092,7 @@ dependencies = [
  "prometheus",
  "regex",
  "reqwest",
+ "rustls",
  "schemars",
  "serde",
  "serde_json",
