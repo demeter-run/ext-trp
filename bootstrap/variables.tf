@@ -26,6 +26,11 @@ variable "network_addresses" {
   default = {}
 }
 
+variable "cert_secret_name" {
+  type    = string
+  default = "trp-proxy-tls"
+}
+
 // Operator
 variable "operator_image_tag" {
   type = string

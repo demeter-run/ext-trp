@@ -1,6 +1,5 @@
 resource "kubernetes_deployment_v1" "trp_proxy" {
   wait_for_rollout = false
-  depends_on       = [kubernetes_manifest.certificate_cluster_wildcard_tls]
 
   metadata {
     name      = local.name
@@ -55,6 +54,11 @@ resource "kubernetes_deployment_v1" "trp_proxy" {
           env {
             name  = "PROXY_NAMESPACE"
             value = var.namespace
+          }
+
+          env {
+            name  = "NETWORK"
+            value = var.network
           }
 
           env {

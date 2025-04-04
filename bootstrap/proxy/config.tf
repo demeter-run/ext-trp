@@ -59,7 +59,7 @@ locals {
 resource "kubernetes_config_map" "proxy" {
   metadata {
     namespace = var.namespace
-    name      = "proxy-config"
+    name      = "proxy-${var.network}-config"
   }
 
   data = {

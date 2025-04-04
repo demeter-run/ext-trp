@@ -15,26 +15,29 @@ module "configs" {
 }
 
 module "feature" {
-  depends_on              = [kubernetes_namespace.namespace]
-  source                  = "./feature"
-  namespace               = var.namespace
-  operator_image_tag      = var.operator_image_tag
-  metrics_delay           = var.metrics_delay
-  resources               = var.operator_resources
-  tolerations             = var.operator_tolerations
-  extension_domain        = var.extension_domain
-  credentials_secret_name = "demeter-workers-credentials"
+  depends_on         = [kubernetes_namespace.namespace]
+  source             = "./feature"
+  namespace          = var.namespace
+  operator_image_tag = var.operator_image_tag
+  metrics_delay      = var.metrics_delay
+  resources          = var.operator_resources
+  tolerations        = var.operator_tolerations
+  extension_domain   = var.extension_domain
+  dns_names          = var.dns_names
 }
 
-module "proxy" {
-  depends_on      = [kubernetes_namespace.namespace]
-  source          = "./proxy"
-  proxy_image_tag = var.proxy_image_tag
-  namespace       = var.namespace
-  replicas        = var.proxy_replicas
-  resources       = var.proxy_resources
-  dns_names       = var.dns_names
-  tolerations     = var.proxy_tolerations
+module "proxies" {
+  depends_on = [kubernetes_namespace.namespace]
+  source     = "./proxy"
+  for_each   = { for network in var.networks : "${network}" => network }
+
+  network          = each.value
+  proxy_image_tag  = var.proxy_image_tag
+  namespace        = var.namespace
+  replicas         = var.proxy_replicas
+  resources        = var.proxy_resources
+  tolerations      = var.proxy_tolerations
+  cert_secret_name = var.cert_secret_name
 }
 
 module "cells" {

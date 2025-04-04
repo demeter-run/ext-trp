@@ -1,6 +1,6 @@
 locals {
-  name = "proxy"
-  role = "proxy"
+  name = "proxy-${var.network}"
+  role = "proxy-${var.network}"
 
   prometheus_port = 9187
   prometheus_addr = "0.0.0.0:${local.prometheus_port}"
@@ -9,6 +9,10 @@ locals {
 }
 
 variable "namespace" {
+  type = string
+}
+
+variable "network" {
   type = string
 }
 
@@ -73,10 +77,6 @@ variable "tolerations" {
 variable "trp_port" {
   type    = number
   default = 8000
-}
-
-variable "dns_names" {
-  type = list(string)
 }
 
 variable "cert_secret_name" {
