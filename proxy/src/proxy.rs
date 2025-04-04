@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use pingora::http::Method;
 use pingora::Result;
 use pingora::{
     http::ResponseHeader,
@@ -103,6 +104,10 @@ impl ProxyHttp for TrpProxy {
     where
         Self::CTX: Send + Sync,
     {
+        if session.req_header().method == Method::OPTIONS {
+            ctx.instance = self.config.instance();
+            return Ok(false);
+        }
         let path = session.req_header().uri.path();
         if path == self.config.health_endpoint {
             self.respond_health(session, ctx).await;
