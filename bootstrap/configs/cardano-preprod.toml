@@ -21,6 +21,7 @@ prune_height = 200
 
 [serve.trp]
 listen_address = "[::]:8000"
+max_optimize_rounds = 10
 
 [mithril]
 aggregator = "https://aggregator.release-preprod.api.mithril.network/aggregator"
