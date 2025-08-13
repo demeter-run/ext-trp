@@ -26,6 +26,11 @@ variable "network_addresses" {
   default = {}
 }
 
+variable "extra_fees" {
+  type    = number
+  default = 200000
+}
+
 variable "cert_secret_name" {
   type    = string
   default = "trp-proxy-tls"

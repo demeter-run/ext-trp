@@ -27,6 +27,11 @@ variable "address" {
   default = null
 }
 
+variable "extra_fees" {
+  type    = number
+  default = 200000
+}
+
 resource "kubernetes_config_map" "node-config" {
   metadata {
     namespace = var.namespace
@@ -35,7 +40,8 @@ resource "kubernetes_config_map" "node-config" {
 
   data = {
     "dolos.toml" = "${templatefile("${path.module}/${var.network}.toml", {
-      address = coalesce(var.address, local.default_address_by_network[var.network])
+      address    = coalesce(var.address, local.default_address_by_network[var.network])
+      extra_fees = var.extra_fees
     })}"
   }
 }

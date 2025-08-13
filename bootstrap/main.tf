@@ -9,9 +9,10 @@ module "configs" {
   source     = "./configs"
   for_each   = { for network in var.networks : "${network}" => network }
 
-  namespace = var.namespace
-  network   = each.value
-  address   = lookup(var.network_addresses, each.value, null)
+  namespace  = var.namespace
+  network    = each.value
+  address    = lookup(var.network_addresses, each.value, null)
+  extra_fees = var.extra_fees
 }
 
 module "feature" {

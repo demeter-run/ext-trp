@@ -23,6 +23,7 @@ prune_height = 200
 listen_address = "[::]:8000"
 max_optimize_rounds = 10
 permissive_cors = true
+extra_fees = ${extra_fees}
 
 [mithril]
 aggregator = "https://aggregator.release-mainnet.api.mithril.network/aggregator"
