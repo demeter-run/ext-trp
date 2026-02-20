@@ -38,6 +38,7 @@ resource "kubernetes_stateful_set_v1" "trp" {
             "snapshot",
             "--variant",
             "ledger",
+            "--skip-if-data"
           ]
 
           resources {
@@ -115,4 +116,3 @@ resource "kubernetes_stateful_set_v1" "trp" {
     }
   }
 }
-
