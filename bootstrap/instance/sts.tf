@@ -41,9 +41,16 @@ resource "kubernetes_stateful_set_v1" "trp" {
             "--skip-if-data"
           ]
 
+          // Fixed resources for bootstrapping.
           resources {
-            limits   = var.resources.limits
-            requests = var.resources.requests
+            requests = {
+              cpu    = "50m"
+              memory = "512Mi"
+            }
+            limits = {
+              cpu    = "1000m"
+              memory = "512Mi"
+            }
           }
 
           volume_mount {
