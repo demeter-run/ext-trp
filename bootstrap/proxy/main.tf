@@ -74,9 +74,8 @@ variable "tolerations" {
   ]
 }
 
-variable "trp_port" {
-  type    = number
-  default = 8000
+variable "trp_instance" {
+  type = string
 }
 
 variable "cert_secret_name" {

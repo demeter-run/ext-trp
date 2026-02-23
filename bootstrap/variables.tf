@@ -106,6 +106,10 @@ variable "proxy_replicas" {
   default = 1
 }
 
+variable "trp_instance_per_network" {
+  type = map(string)
+}
+
 variable "proxy_resources" {
   type = object({
     limits = object({

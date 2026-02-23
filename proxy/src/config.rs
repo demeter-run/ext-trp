@@ -9,8 +9,7 @@ pub struct Config {
     pub prometheus_addr: String,
     pub ssl_crt_path: String,
     pub ssl_key_path: String,
-    pub trp_port: u16,
-    pub trp_dns: String,
+    pub trp_instance: String,
     pub health_endpoint: String,
     pub network: String,
 }
@@ -34,17 +33,9 @@ impl Config {
             prometheus_addr: env::var("PROMETHEUS_ADDR").expect("PROMETHEUS_ADDR must be set"),
             ssl_crt_path: env::var("SSL_CRT_PATH").expect("SSL_CRT_PATH must be set"),
             ssl_key_path: env::var("SSL_KEY_PATH").expect("SSL_KEY_PATH must be set"),
-            trp_port: env::var("TRP_PORT")
-                .expect("TRP_PORT must be set")
-                .parse()
-                .expect("TRP_PORT must a number"),
-            trp_dns: env::var("TRP_DNS").expect("TRP_DNS must be set"),
             health_endpoint: "/dmtr_health".to_string(),
+            trp_instance: env::var("TRP_INSTANCE").expect("TRP_INSTANCE must be set"),
         }
-    }
-
-    pub fn instance(&self) -> String {
-        format!("trp-{}.{}:{}", self.network, self.trp_dns, self.trp_port)
     }
 }
 impl Default for Config {

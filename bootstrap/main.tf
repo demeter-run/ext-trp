@@ -39,6 +39,7 @@ module "proxies" {
   resources        = var.proxy_resources
   tolerations      = var.proxy_tolerations
   cert_secret_name = var.cert_secret_name
+  trp_instance     = var.trp_instance_per_network[each.key]
 }
 
 module "cells" {
@@ -84,4 +85,3 @@ module "services" {
   namespace = var.namespace
   network   = each.value
 }
-

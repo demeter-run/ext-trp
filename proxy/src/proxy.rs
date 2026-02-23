@@ -105,7 +105,7 @@ impl ProxyHttp for TrpProxy {
         Self::CTX: Send + Sync,
     {
         if session.req_header().method == Method::OPTIONS {
-            ctx.instance = self.config.instance();
+            ctx.instance = self.config.trp_instance.clone();
             return Ok(false);
         }
         let path = session.req_header().uri.path();
@@ -130,7 +130,7 @@ impl ProxyHttp for TrpProxy {
         }
 
         ctx.consumer = consumer;
-        ctx.instance = self.config.instance();
+        ctx.instance = self.config.trp_instance.clone();
 
         if self.limiter(&ctx.consumer).await? {
             session.respond_error(429).await?;

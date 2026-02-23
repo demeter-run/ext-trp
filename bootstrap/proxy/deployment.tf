@@ -72,13 +72,8 @@ resource "kubernetes_deployment_v1" "trp_proxy" {
           }
 
           env {
-            name  = "TRP_PORT"
-            value = var.trp_port
-          }
-
-          env {
-            name  = "TRP_DNS"
-            value = "${var.namespace}.svc.cluster.local"
+            name  = "TRP_INSTANCE"
+            value = var.trp_instance
           }
 
           env {
