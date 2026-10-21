@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - ".github/workflows/clippy.yml"
+      - "Cargo.lock"
+      - "Cargo.toml"
+      - "scripts/check-trust-floor.sh"
       - "operator/**"
       - "proxy/**"
   pull_request:
@@ -13,6 +16,9 @@ on:
       - main
     paths:
       - ".github/workflows/clippy.yml"
+      - "Cargo.lock"
+      - "Cargo.toml"
+      - "scripts/check-trust-floor.sh"
       - "operator/**"
       - "proxy/**"
 
@@ -25,6 +31,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Check trust floor
+        run: sh scripts/check-trust-floor.sh Cargo.lock
 
       - name: Clippy check lints
         run: cargo clippy -- -D warnings
