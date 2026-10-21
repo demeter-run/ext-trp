@@ -6,9 +6,12 @@ on:
       - "main"
     paths:
       - ".github/image/Dockerfile"
-      - ".github/workflows/docker.yml"
+      - ".github/workflows/build.yml"
+      - "Cargo.lock"
+      - "Cargo.toml"
       - "operator/**"
       - "proxy/**"
+  workflow_dispatch: {}
 
 jobs:
   build:
