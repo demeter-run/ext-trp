@@ -28,6 +28,8 @@ resource "kubernetes_stateful_set_v1" "trp" {
         }
       }
       spec {
+        automount_service_account_token = false
+
         init_container {
           name  = "init"
           image = "ghcr.io/txpipe/dolos:${var.dolos_version}"
