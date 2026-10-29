@@ -23,6 +23,8 @@ resource "kubernetes_deployment_v1" "trp_proxy" {
         }
       }
       spec {
+        service_account_name = "proxy"
+
         container {
           name              = "main"
           image             = "ghcr.io/demeter-run/ext-trp-proxy:${var.proxy_image_tag}"
