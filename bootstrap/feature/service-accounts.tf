@@ -14,12 +14,3 @@ resource "kubernetes_service_account_v1" "operator" {
 
   automount_service_account_token = true
 }
-
-resource "kubernetes_service_account_v1" "proxy" {
-  metadata {
-    namespace = var.namespace
-    name      = "proxy"
-  }
-
-  automount_service_account_token = true
-}
