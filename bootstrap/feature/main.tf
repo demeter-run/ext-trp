@@ -15,15 +15,6 @@ variable "metrics_delay" {
   default     = "30"
 }
 
-variable "dns_names" {
-  type = list(string)
-}
-
-variable "cert_secret_name" {
-  type    = string
-  default = "trp-proxy-tls"
-}
-
 variable "tolerations" {
   type = list(object({
     effect   = string

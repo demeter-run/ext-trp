@@ -24,22 +24,6 @@ module "feature" {
   resources          = var.operator_resources
   tolerations        = var.operator_tolerations
   extension_domain   = var.extension_domain
-  dns_names          = var.dns_names
-}
-
-module "proxies" {
-  depends_on = [kubernetes_namespace.namespace]
-  source     = "./proxy"
-  for_each   = { for network in var.networks : "${network}" => network }
-
-  network          = each.value
-  proxy_image_tag  = var.proxy_image_tag
-  namespace        = var.namespace
-  replicas         = var.proxy_replicas
-  resources        = var.proxy_resources
-  tolerations      = var.proxy_tolerations
-  cert_secret_name = var.cert_secret_name
-  trp_instance     = var.trp_instance_per_network[each.key]
 }
 
 module "cells" {

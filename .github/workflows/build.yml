@@ -10,7 +10,6 @@ on:
       - "Cargo.lock"
       - "Cargo.toml"
       - "operator/**"
-      - "proxy/**"
   workflow_dispatch: {}
 
 jobs:
@@ -51,7 +50,6 @@ jobs:
       - name: rename binaries
         run: |
           mv target/${{ matrix.target }}/release/controller${{ matrix.ext }} controller-${{ matrix.release_for }}${{ matrix.ext }}
-          mv target/${{ matrix.target }}/release/proxy${{ matrix.ext }} proxy-${{ matrix.release_for }}${{ matrix.ext }}
 
       - name: upload controller 
         uses: actions/upload-artifact@v4
@@ -59,11 +57,6 @@ jobs:
           name: binaries-controller-${{ matrix.release_for }}
           path: controller-${{ matrix.release_for }}${{ matrix.ext }}
 
-      - name: upload proxy 
-        uses: actions/upload-artifact@v4
-        with:
-          name: binaries-proxy-${{ matrix.release_for }}
-          path: proxy-${{ matrix.release_for }}${{ matrix.ext }}
       
       
 
@@ -76,8 +69,6 @@ jobs:
         include:
           - tags: ghcr.io/demeter-run/ext-trp-operator,ghcr.io/demeter-run/ext-trp-operator:${{ github.sha }}
             binary: controller
-          - tags: ghcr.io/demeter-run/ext-trp-proxy,ghcr.io/demeter-run/ext-trp-proxy:${{ github.sha }}
-            binary: proxy
 
     permissions:
       contents: read
@@ -110,7 +101,6 @@ jobs:
       - name: Rename artifacts
         run: |+
           mv .github/image/bin/controller-Linux-x86_64 .github/image/bin/controller-Linux-amd64
-          mv .github/image/bin/proxy-Linux-x86_64 .github/image/bin/proxy-Linux-amd64
 
       - name: Build and push
         uses: docker/build-push-action@v5
